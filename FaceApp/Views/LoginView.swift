@@ -1,39 +1,34 @@
-//
-//  LoginView.swift
-//  FaceApp
-//
-//  Created by 강민영 on 3/27/25.
-//
-
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email: String = ""
+    @State private var userId: String = ""
     @State private var password: String = ""
 
     var body: some View {
-        VStack(spacing: 24) {
-            Text("로그인")
+        VStack {
+            Spacer()
+            Text("Login")
+                .padding()
                 .font(.largeTitle)
-                .fontWeight(.bold)
-
+                .bold()
+            // 입력 필드
             VStack(spacing: 16) {
-                TextField("이메일을 입력하세요", text: $email)
+                TextField("아이디", text: $userId)
                     .padding()
                     .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                    .keyboardType(.emailAddress)
+                    .cornerRadius(10)
                     .autocapitalization(.none)
 
-                SecureField("비밀번호를 입력하세요", text: $password)
+                SecureField("비밀번호", text: $password)
                     .padding()
                     .background(Color(.systemGray6))
-                    .cornerRadius(8)
+                    .cornerRadius(10)
             }
-
+            .padding(.horizontal, 30)
+            
+            // 로그인 버튼
             Button(action: {
-                // 여기에 로그인 API 연동 예정
-                print("로그인 시도 - 이메일: \(email), 비밀번호: \(password)")
+                print("로그인 시도 - 아이디: \(userId), 비밀번호: \(password)")
             }) {
                 Text("로그인")
                     .frame(maxWidth: .infinity)
@@ -41,11 +36,29 @@ struct LoginView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
+                    .padding(.horizontal, 30)
+                    .padding(.top, 20)
             }
-
+            
+            // 비밀번호 찾기, 회원가입
+            HStack {
+                Button("비밀번호 찾기") {
+                    // 추후 구현
+                }
+                Spacer()
+                Button("회원가입") {
+                    // 추후 구현
+                }
+            }
+            .font(.footnote)
+            .foregroundColor(.gray)
+            .padding(.horizontal, 30)
+            .padding(.top, 10)
+            
             Spacer()
         }
-        .padding()
+        .background(Color.white)
+        .ignoresSafeArea()
     }
 }
 
