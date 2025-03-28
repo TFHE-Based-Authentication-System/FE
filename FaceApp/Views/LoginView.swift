@@ -6,7 +6,7 @@ struct LoginView: View {
 
     var body: some View {
         VStack {
-            Spacer()
+            Spacer().frame(height: 200)
             Text("Login")
                 .padding()
                 .font(.largeTitle)
