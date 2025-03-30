@@ -4,66 +4,92 @@ struct MainView: View {
     @State private var showSidebar = false
     @State private var showLogin = false
     @State private var showSignUp = false
-    @State private var isLoggedIn = false
+    @State private var isLoggedIn = true
+    @StateObject var authService = AuthService.shared
+    @State private var showCamera = false
+    @StateObject var permissionManager = PermissionManager()
+
+
 
     var body: some View {
         ZStack(alignment: .trailing) {
             // 메인화면
             VStack {
-                HStack {
+                if authService.isLoggedIn{
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                             withAnimation {
+                                  showSidebar = true
+                             }
+                         }) {
+                            Image(systemName: "line.3.horizontal")
+                                .font(.title)
+                                .padding()
+                        }
+                    }
                     Spacer()
+                    Text("FaceApp 메인화면")
+                        .font(.largeTitle)
+                        .bold()
+                    Spacer()
+                }
+                else{
+                    Spacer()
+                    Image(systemName: "faceid")
+                        .resizable()
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.gray)
+                        .padding()
+                        .onTapGesture {
+                            permissionManager.checkCameraPermission()
+                            if permissionManager.isCameraAuthorized {
+                                showCamera = true
+                            }
+                        }
+                    
+                    Text("FaceApp")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+
+                    Text("AI 얼굴 인증 서비스")
+                        .foregroundColor(.gray)
+                        .font(.subheadline)
+
+            
                     Button(action: {
                         withAnimation {
-                            showSidebar = true
+                            showLogin = true
+                            }
+                        }) {
+                            Text("로그인하고 시작하기")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(width: 240)
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                                .shadow(radius: 2)
                         }
-                    }) {
-                        Image(systemName: "line.3.horizontal")
-                            .font(.title)
-                            .padding()
-                    }
-                }
-                
-                Spacer()
-
-                                VStack(spacing: 16) {
-                                    Image(systemName: "faceid")
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .foregroundColor(.blue)
-                                        .padding()
-
-                                    Text("FaceApp")
-                                        .font(.largeTitle)
-                                        .fontWeight(.bold)
-
-                                    Text("AI 얼굴 인증 서비스")
-                                        .foregroundColor(.gray)
-                                        .font(.subheadline)
-
-                                    if isLoggedIn {
-                                        Text("환영합니다 😊")
-                                            .font(.headline)
-                                            .padding(.top, 10)
-                                    } else {
-                                        Button(action: {
-                                            
-                                        }) {
-                                            Text("로그인하고 시작하기")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-                                                .padding()
-                                                .frame(width: 240)
-                                                .background(Color.blue)
-                                                .cornerRadius(10)
-                                                .shadow(radius: 2)
+                    
+                    
+                    Button(action: {
+                        withAnimation {
+                             showSignUp = true
+                        }
+                      }) {
+                          Text("회원가입")
+                             .foregroundColor(.blue)
+                              .padding(.top, 10)
                                         }
-                                        .padding(.top, 20)
-                                    }
-                                }
+                    Spacer()
+                    }
+                    
+                    
+                }
 
-                                Spacer()
+                                
             
-            }
 
             // 옵션바
             if showSidebar {
@@ -75,7 +101,7 @@ struct MainView: View {
                           }
                       }
 
-                  SideMenuView(showMenu: $showSidebar, showLogin: $showLogin, showSignUp: $showSignUp)
+                  SideMenuView(showMenu: $showSidebar, showLogin: $showLogin, showSignUp: $showSignUp,isLoggedIn: $isLoggedIn)
                       .transition(.move(edge: .trailing))
             }
 
@@ -88,7 +114,7 @@ struct MainView: View {
                             showLogin = false
                         }
                     }
-                LoginView()
+                LoginView(isLoggedIn: $isLoggedIn,showSignUp: $showSignUp)
                     .transition(.move(edge: .bottom))
                     .gesture(
                                 DragGesture()
@@ -124,6 +150,9 @@ struct MainView: View {
             }
 
         }
+        .sheet(isPresented: $showCamera) {
+                   CameraView()
+               }
     }
 }
 #Preview{

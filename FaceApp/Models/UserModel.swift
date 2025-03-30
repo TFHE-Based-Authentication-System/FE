@@ -9,15 +9,15 @@ import Foundation
 
 final class UserModel {
     struct User {
-        var userId: String
+        var email: String
         var password: String
     }
     
-    // 아이디 형식 검사 (영문/숫자 4~12자)
-    func isValidUserId(id: String) -> Bool {
-        let idRegEx = "^[a-zA-Z0-9]{4,12}$"
-        let idTest = NSPredicate(format: "SELF MATCHES %@", idRegEx)
-        return idTest.evaluate(with: id)
+    // 이메일 형식 검사
+    func isValidEmail(email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: email)
     }
     
     // 비밀번호 형식 검사 (영문/숫자 8자 이상)

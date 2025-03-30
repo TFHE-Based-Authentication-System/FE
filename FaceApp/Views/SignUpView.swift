@@ -33,7 +33,7 @@ struct SignUpView: View {
             .padding(.horizontal)
 
             Button(action: {
-                print("회원가입 시도 - 아이디: \(userId), 비밀번호: \(password)")
+                AuthService.shared.signUp(email: userId, password: password)
                 // 여기에 회원가입 API 연동 예정
             }) {
                 Text("회원가입")

@@ -4,23 +4,22 @@ struct SideMenuView: View {
     @Binding var showMenu: Bool
     @Binding var showLogin: Bool
     @Binding var showSignUp: Bool
+    @Binding var isLoggedIn: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Button("로그인") {
+            
+            Button("로그아웃") {
                 withAnimation {
-                    showLogin = true
+                    // 상태 초기화
                     showMenu = false
+                    showLogin = false
+                    showSignUp = false
+                    isLoggedIn = false
                 }
+                AuthService.shared.logout()
             }
             .padding()
-            
-            Button("회원가입"){
-                withAnimation {
-                    showSignUp = true
-                    showMenu = false
-                }
-            }
             
             Spacer()
         }
