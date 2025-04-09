@@ -1,11 +1,3 @@
-//
-//  PasswordRecoveryView.swift
-//  FaceApp
-//
-//  Created by 강민영 on 3/30/25.
-//
-
-
 import SwiftUI
 
 struct PasswordRecoveryView: View {

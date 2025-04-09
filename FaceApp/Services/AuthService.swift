@@ -1,18 +1,21 @@
 import Foundation
 import Combine
 
+// 로그인/회원가입 상태를 관리하는 싱글톤 인증 서비스
 final class AuthService: ObservableObject {
     static let shared = AuthService()
     
-    @Published var isLoggedIn: Bool = false
+    @Published var isLoggedIn: Bool = false // 로그인 상태를 뷰에서 관찰 가능하게 함
     
-    private let baseURL = "http://서버주소/api/user" // 🔥 백엔드가 준 주소에 맞게 수정
+    private let baseURL = "http://3.39.109.122/api/user"    // 서버의 api 주소
+
     private var cancellables = Set<AnyCancellable>()
     
     private init() {}
     
-    // MARK: - 로그인
+    // 로그인 함수
     func login(email: String, password: String) {
+        // 요청 본문 구성
         guard let url = URL(string: "\(baseURL)/login") else { return }
         let body: [String: String] = ["email": email, "password": password]
         var request = URLRequest(url: url)
@@ -20,6 +23,7 @@ final class AuthService: ObservableObject {
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        // 서버에 로그인 요청
         URLSession.shared.dataTaskPublisher(for: request)
             .map { $0.data }
             .decode(type: AuthResponse.self, decoder: JSONDecoder())
@@ -39,8 +43,9 @@ final class AuthService: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - 회원가입
+    // 회원가입 함수
     func signUp(email: String, password: String) {
+        // 요청 본문 구성
         guard let url = URL(string: "\(baseURL)/signup") else { return }
         let body: [String: String] = ["email": email, "password": password]
         var request = URLRequest(url: url)
@@ -48,6 +53,8 @@ final class AuthService: ObservableObject {
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        
+        // 서버에 회원가입 요청
         URLSession.shared.dataTaskPublisher(for: request)
             .map { $0.data }
             .decode(type: AuthResponse.self, decoder: JSONDecoder())
@@ -65,14 +72,14 @@ final class AuthService: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - 로그아웃
+    // 로그아웃 함수
     func logout() {
         isLoggedIn = false
         print("🚪 로그아웃 완료")
     }
 }
 
-// MARK: - 공통 Response
+// 공통 Response
 struct AuthResponse: Codable {
     let message: String
 }

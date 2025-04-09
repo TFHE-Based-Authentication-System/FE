@@ -1,18 +1,16 @@
-//
-//  CameraView.swift
-//  FaceApp
-//
-//  Created by 강민영 on 3/31/25.
-//
-
-
 import SwiftUI
 import AVFoundation
 
 struct CameraView: UIViewControllerRepresentable {
+    @Environment(\.presentationMode) var presentationMode
+    var isRegistering: Bool
+
     func makeUIViewController(context: Context) -> CameraViewController {
-        return CameraViewController()
+        let controller = CameraViewController()
+        controller.isRegistering = isRegistering
+        controller.modalPresentationStyle = .fullScreen
+        return controller
     }
-    
+
     func updateUIViewController(_ uiViewController: CameraViewController, context: Context) {}
 }

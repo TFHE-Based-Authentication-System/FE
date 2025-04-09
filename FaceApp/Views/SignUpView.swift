@@ -34,7 +34,7 @@ struct SignUpView: View {
 
             Button(action: {
                 AuthService.shared.signUp(email: userId, password: password)
-                // 여기에 회원가입 API 연동 예정
+                
             }) {
                 Text("회원가입")
                     .frame(maxWidth: .infinity)

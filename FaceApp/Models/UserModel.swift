@@ -1,14 +1,9 @@
-//
-//  UserModel.swift
-//  FaceApp
-//
-//  Created by 강민영 on 3/28/25.
-//
-
 import Foundation
 
+// 사용자 관련 유효성 검사 유틸 함수
 final class UserModel {
-    struct User {
+    
+    struct User {   // user 데이터 구조체 (이메일과 비밀번호 형식 지정)
         var email: String
         var password: String
     }

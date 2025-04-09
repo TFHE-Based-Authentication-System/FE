@@ -4,10 +4,12 @@ struct MainView: View {
     @State private var showSidebar = false
     @State private var showLogin = false
     @State private var showSignUp = false
-    @State private var isLoggedIn = true
+    @State private var isLoggedIn = false
     @StateObject var authService = AuthService.shared
     @State private var showCamera = false
     @StateObject var permissionManager = PermissionManager()
+    @State private var isRegistering = false // 등록 or 판별 모드
+
 
 
 
@@ -150,9 +152,34 @@ struct MainView: View {
             }
 
         }
+        Button("얼굴 등록") {
+            permissionManager.checkCameraPermission()
+            if permissionManager.isCameraAuthorized {
+                isRegistering = true
+                showCamera = true
+            }
+        }
+        .padding()
+        .background(Color.green)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+
+        Button("얼굴 인증") {
+            permissionManager.checkCameraPermission()
+            if permissionManager.isCameraAuthorized {
+                isRegistering = false
+                showCamera = true
+            }
+        }
+        .padding()
+        .background(Color.orange)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+
         .sheet(isPresented: $showCamera) {
-                   CameraView()
-               }
+            CameraView(isRegistering: isRegistering)
+        }
+
     }
 }
 #Preview{
